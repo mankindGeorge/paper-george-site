@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 
@@ -10,15 +10,25 @@ export class ProjectsService {
     return this.prisma.project.findMany({ orderBy: { sortOrder: 'asc' } });
   }
 
-  create(dto: CreateProjectDto) {
+  async create(dto: CreateProjectDto) {
     return this.prisma.project.create({ data: dto });
   }
 
-  update(id: number, dto: Partial<CreateProjectDto>) {
-    return this.prisma.project.update({ where: { id }, data: dto });
+  async update(id: number, dto: Partial<CreateProjectDto>) {
+    try {
+      return await this.prisma.project.update({ where: { id }, data: dto });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException(`Project #${id} not found`);
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.project.delete({ where: { id } });
+  async remove(id: number) {
+    try {
+      return await this.prisma.project.delete({ where: { id } });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException(`Project #${id} not found`);
+      throw error;
+    }
   }
 }

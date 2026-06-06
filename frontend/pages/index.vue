@@ -1,5 +1,7 @@
 <template>
   <div class="min-h-screen bg-newsprint">
+    <a href="#main-content" class="skip-to-content">跳转到主内容</a>
+
     <!-- SVG Halftone Filter Definition -->
     <svg class="absolute w-0 h-0" aria-hidden="true">
       <defs>
@@ -17,7 +19,7 @@
     </svg>
 
     <NavBar />
-    <div ref="scrollContainer" class="h-[calc(100vh-52px)] overflow-y-scroll">
+    <div ref="scrollContainer" class="h-[calc(100vh-52px)] overflow-y-scroll" id="main-content">
       <!-- Section 1: Masthead -->
       <section id="home" class="min-h-full flex flex-col">
         <Masthead />
@@ -111,8 +113,9 @@
             class="space-y-6 relative z-10"
           >
             <div>
-              <label class="font-mono text-xs uppercase tracking-widest block mb-1">您的姓名</label>
+              <label for="contact-name" class="font-mono text-xs uppercase tracking-widest block mb-1">您的姓名</label>
               <input
+                id="contact-name"
                 v-model="form.name"
                 type="text"
                 required
@@ -120,8 +123,9 @@
               />
             </div>
             <div>
-              <label class="font-mono text-xs uppercase tracking-widest block mb-1">您的邮箱</label>
+              <label for="contact-email" class="font-mono text-xs uppercase tracking-widest block mb-1">您的邮箱</label>
               <input
+                id="contact-email"
                 v-model="form.email"
                 type="email"
                 required
@@ -129,8 +133,9 @@
               />
             </div>
             <div>
-              <label class="font-mono text-xs uppercase tracking-widest block mb-1">主题</label>
+              <label for="contact-subject" class="font-mono text-xs uppercase tracking-widest block mb-1">主题</label>
               <input
+                id="contact-subject"
                 v-model="form.subject"
                 type="text"
                 required
@@ -138,8 +143,9 @@
               />
             </div>
             <div>
-              <label class="font-mono text-xs uppercase tracking-widest block mb-1">留言内容</label>
+              <label for="contact-body" class="font-mono text-xs uppercase tracking-widest block mb-1">留言内容</label>
               <textarea
+                id="contact-body"
                 v-model="form.body"
                 rows="4"
                 required

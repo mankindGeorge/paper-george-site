@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -20,7 +20,12 @@ export class MessagesService {
     return this.prisma.message.findMany({ orderBy: { createdAt: 'desc' } });
   }
 
-  markAsRead(id: number) {
-    return this.prisma.message.update({ where: { id }, data: { isRead: true } });
+  async markAsRead(id: number) {
+    try {
+      return await this.prisma.message.update({ where: { id }, data: { isRead: true } });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException(`Message #${id} not found`);
+      throw error;
+    }
   }
 }

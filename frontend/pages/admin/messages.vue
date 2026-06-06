@@ -2,7 +2,9 @@
   <NuxtLayout name="admin">
     <div class="space-y-6">
       <h2 class="font-headline text-2xl text-stamp border-b-2 border-stamp pb-2">留言管理</h2>
-      <div v-if="messages.length === 0" class="font-mono text-sm text-newsprint/60">暂无留言。</div>
+      <div v-if="loading" class="text-center py-8 font-mono text-sm text-newsprint/60">加载中...</div>
+      <div v-else-if="error" class="text-center py-8 font-mono text-sm text-stamp">{{ error }}</div>
+      <div v-else-if="messages.length === 0" class="font-mono text-sm text-newsprint/60">暂无留言。</div>
       <div
         v-for="msg in messages"
         :key="msg.id"
@@ -29,19 +31,33 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: false })
+definePageMeta({ layout: false, middleware: 'admin-auth' })
 
 const { get, put } = useApi()
 
 const messages = ref<any[]>([])
+const loading = ref(true)
+const error = ref('')
 
 const loadMessages = async () => {
-  messages.value = await get<any[]>('/api/messages')
+  loading.value = true
+  error.value = ''
+  try {
+    messages.value = await get<any[]>('/api/messages')
+  } catch (e: any) {
+    error.value = '加载失败: ' + (e?.data?.message || e?.message || '未知错误')
+  } finally {
+    loading.value = false
+  }
 }
 
 const markRead = async (id: number) => {
-  await put(`/api/messages/${id}/read`, {})
-  await loadMessages()
+  try {
+    await put(`/api/messages/${id}/read`, {})
+    await loadMessages()
+  } catch (e: any) {
+    error.value = '操作失败: ' + (e?.data?.message || e?.message || '未知错误')
+  }
 }
 
 onMounted(loadMessages)

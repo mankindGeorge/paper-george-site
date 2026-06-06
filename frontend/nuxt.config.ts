@@ -18,6 +18,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      htmlAttrs: { lang: 'zh-CN' },
       title: 'Mankind George 纪事报',
       meta: [
         { name: 'description', content: 'Mankind George 的个人作品集与博客' },

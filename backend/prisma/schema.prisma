@@ -20,7 +20,7 @@ model Experience {
   year            String
   title           String
   contentMarkdown String   @default("")
-  stampStatus     String   @default("published")
+  stampStatus     StampStatus @default(published)
   sortOrder       Int      @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -57,4 +57,10 @@ model Message {
   body      String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+enum StampStatus {
+  published
+  draft
+  archived
 }

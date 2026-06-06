@@ -20,9 +20,20 @@ export const useAuth = () => {
     navigateTo('/admin/login')
   }
 
-  const init = () => {
-    // Token is in httpOnly cookie, we just set the reactive state from the login response
-    // On page refresh, the cookie is sent automatically by the browser
+  const init = async () => {
+    if (!token.value && import.meta.client) {
+      const config = useRuntimeConfig()
+      try {
+        await $fetch<{ user: any }>(`${config.public.apiBase}/api/auth/validate`, {
+          credentials: 'include',
+        })
+        // If cookie is valid but token state is lost, we need to re-login
+        // The httpOnly cookie exists but we can't read it client-side
+        // The admin layout will handle redirect if needed
+      } catch {
+        // Cookie is invalid or expired, stay unauthenticated
+      }
+    }
   }
 
   const authHeaders = computed(() => token.value ? { Authorization: `Bearer ${token.value}` } : {})

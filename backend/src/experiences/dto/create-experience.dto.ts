@@ -1,4 +1,10 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsEnum } from 'class-validator';
+
+export enum StampStatus {
+  published = 'published',
+  draft = 'draft',
+  archived = 'archived',
+}
 
 export class CreateExperienceDto {
   @IsString()
@@ -13,9 +19,9 @@ export class CreateExperienceDto {
   @IsString()
   contentMarkdown: string;
 
-  @IsString()
+  @IsEnum(StampStatus)
   @IsOptional()
-  stampStatus?: string;
+  stampStatus?: StampStatus;
 
   @IsNumber()
   @IsOptional()

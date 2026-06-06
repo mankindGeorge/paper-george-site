@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateExperienceDto } from './dto/create-experience.dto';
 
@@ -24,15 +24,25 @@ export class ExperiencesService {
     return this.prisma.experience.findMany({ orderBy: { sortOrder: 'asc' } });
   }
 
-  create(dto: CreateExperienceDto) {
+  async create(dto: CreateExperienceDto) {
     return this.prisma.experience.create({ data: dto });
   }
 
-  update(id: number, dto: Partial<CreateExperienceDto>) {
-    return this.prisma.experience.update({ where: { id }, data: dto });
+  async update(id: number, dto: Partial<CreateExperienceDto>) {
+    try {
+      return await this.prisma.experience.update({ where: { id }, data: dto });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException(`Experience #${id} not found`);
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.experience.delete({ where: { id } });
+  async remove(id: number) {
+    try {
+      return await this.prisma.experience.delete({ where: { id } });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException(`Experience #${id} not found`);
+      throw error;
+    }
   }
 }

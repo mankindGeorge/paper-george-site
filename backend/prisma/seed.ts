@@ -18,46 +18,43 @@ async function main() {
     },
   });
 
-  // Experiences
-  const experiences = [
-    { columnType: 'early', year: '2018', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 1 },
-    { columnType: 'early', year: '2019', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 2 },
-    { columnType: 'early', year: '2020', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 3 },
-    { columnType: 'engineering', year: '2020', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 1 },
-    { columnType: 'engineering', year: '2021', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 2 },
-    { columnType: 'engineering', year: '2022', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 3 },
-    { columnType: 'open-source', year: '2022', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 1 },
-    { columnType: 'open-source', year: '2023', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 2 },
-    { columnType: 'open-source', year: '2024', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 3 },
-  ];
+  // Experiences - delete and recreate for idempotency
+  await prisma.experience.deleteMany();
+  await prisma.experience.createMany({
+    data: [
+      { columnType: 'early', year: '2018', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 1 },
+      { columnType: 'early', year: '2019', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 2 },
+      { columnType: 'early', year: '2020', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 3 },
+      { columnType: 'engineering', year: '2020', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 1 },
+      { columnType: 'engineering', year: '2021', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 2 },
+      { columnType: 'engineering', year: '2022', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 3 },
+      { columnType: 'open-source', year: '2022', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 1 },
+      { columnType: 'open-source', year: '2023', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 2 },
+      { columnType: 'open-source', year: '2024', title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', contentMarkdown: '[INSERT_MANKIND_GEORGE_INFO_HERE]', stampStatus: 'published', sortOrder: 3 },
+    ],
+  });
 
-  for (const exp of experiences) {
-    await prisma.experience.create({ data: exp });
-  }
+  // Projects - delete and recreate for idempotency
+  await prisma.project.deleteMany();
+  await prisma.project.createMany({
+    data: [
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], sortOrder: 1 },
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], sortOrder: 2 },
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], sortOrder: 3 },
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], sortOrder: 4 },
+    ],
+  });
 
-  // Projects
-  const projects = [
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], url: null, sortOrder: 1 },
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], url: null, sortOrder: 2 },
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], url: null, sortOrder: 3 },
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', description: '[INSERT_MANKIND_GEORGE_INFO_HERE]', tags: ['[INSERT_MANKIND_GEORGE_INFO_HERE]'], url: null, sortOrder: 4 },
-  ];
-
-  for (const proj of projects) {
-    await prisma.project.create({ data: proj });
-  }
-
-  // Scraps
-  const scraps = [
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: 1.5, sortOrder: 1 },
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: -0.8, sortOrder: 2 },
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: 0.5, sortOrder: 3 },
-    { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: -1.2, sortOrder: 4 },
-  ];
-
-  for (const scrap of scraps) {
-    await prisma.scrap.create({ data: scrap });
-  }
+  // Scraps - delete and recreate for idempotency
+  await prisma.scrap.deleteMany();
+  await prisma.scrap.createMany({
+    data: [
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: 1.5, sortOrder: 1 },
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: -0.8, sortOrder: 2 },
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: 0.5, sortOrder: 3 },
+      { title: '[INSERT_MANKIND_GEORGE_INFO_HERE]', content: '[INSERT_MANKIND_GEORGE_INFO_HERE]', rotation: -1.2, sortOrder: 4 },
+    ],
+  });
 
   console.log('Seed completed.');
 }

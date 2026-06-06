@@ -186,3 +186,36 @@ html {
 .press-feedback:active {
   animation: press-down 0.2s ease-out;
 }
+
+/* 跳转到主内容（无障碍） */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: #1E1E1E;
+  color: #F2EFE9;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: top 0.2s;
+}
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* 焦点可见样式（无障碍） */
+*:focus-visible {
+  outline: 2px solid #A64444;
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: #A64444;
+  box-shadow: 0 0 0 1px #A64444;
+}

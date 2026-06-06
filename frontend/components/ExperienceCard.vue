@@ -47,18 +47,3 @@ const toggle = () => { isOpen.value = !isOpen.value }
 
 const renderedContent = computed(() => md.render(props.experience.contentMarkdown || ''))
 </script>
-
-<style scoped>
-.fold-corner::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 0 20px 20px;
-  border-color: transparent transparent #DCD7C9 transparent;
-  filter: drop-shadow(-1px -1px 0px #1E1E1E);
-}
-</style>

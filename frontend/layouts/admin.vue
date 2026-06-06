@@ -15,12 +15,5 @@
 </template>
 
 <script setup lang="ts">
-const { isAuthenticated, logout, init } = useAuth()
-
-onMounted(() => {
-  init()
-  if (!isAuthenticated.value) {
-    navigateTo('/admin/login')
-  }
-})
+const { isAuthenticated, logout } = useAuth()
 </script>

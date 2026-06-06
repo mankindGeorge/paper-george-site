@@ -72,10 +72,6 @@
         <div class="border-b-2 border-ink mb-4" />
         <p class="text-base leading-relaxed font-body mb-4">{{ project.description }}</p>
         <PerforatedLine :tags="project.tags" />
-        <div class="mt-4 pt-4 border-t border-ink/20">
-          <p class="font-mono text-xs text-ink/70 mb-2 uppercase tracking-widest">项目详情</p>
-          <p class="text-base font-body leading-relaxed">{{ project.description }}</p>
-        </div>
         <a
           v-if="project.url"
           :href="project.url"

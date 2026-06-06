@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: false })
+definePageMeta({ layout: false, middleware: 'admin-auth' })
 
 const adminLinks = [
   { to: '/admin/experiences', title: '经历管理', desc: '里程碑编年史条目' },

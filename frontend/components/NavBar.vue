@@ -1,16 +1,42 @@
 <template>
-  <nav class="border-b-2 border-ink bg-newsprint sticky top-0 z-40">
+  <nav class="border-b-2 border-ink bg-newsprint sticky top-0 z-40" role="navigation" aria-label="主导航">
     <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
       <a href="#home" class="font-headline text-lg font-bold tracking-tight uppercase" @click.prevent="scrollTo('home')">M.G.C.</a>
-      <div class="flex items-center gap-1 md:gap-4">
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-1 md:gap-4">
         <a
           v-for="link in links"
           :key="link.id"
           :href="`#${link.id}`"
           class="font-mono text-xs uppercase tracking-widest px-2 py-1 hover:bg-ink hover:text-newsprint transition-colors cursor-pointer"
+          role="link"
           @click.prevent="scrollTo(link.id)"
         >{{ link.label }}</a>
       </div>
+
+      <!-- Mobile hamburger -->
+      <button
+        class="md:hidden flex flex-col gap-1 p-2"
+        aria-label="打开导航菜单"
+        :aria-expanded="mobileOpen ? 'true' : 'false'"
+        @click="mobileOpen = !mobileOpen"
+      >
+        <span class="block w-5 h-0.5 bg-ink transition-transform" :class="mobileOpen ? 'rotate-45 translate-y-1.5' : ''" />
+        <span class="block w-5 h-0.5 bg-ink transition-opacity" :class="mobileOpen ? 'opacity-0' : ''" />
+        <span class="block w-5 h-0.5 bg-ink transition-transform" :class="mobileOpen ? '-rotate-45 -translate-y-1.5' : ''" />
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div v-if="mobileOpen" class="md:hidden border-t-2 border-ink bg-newsprint">
+      <a
+        v-for="link in links"
+        :key="link.id"
+        :href="`#${link.id}`"
+        class="block font-mono text-xs uppercase tracking-widest px-4 py-3 hover:bg-ink hover:text-newsprint transition-colors"
+        @click.prevent="scrollTo(link.id); mobileOpen = false"
+      >{{ link.label }}</a>
     </div>
   </nav>
 </template>
@@ -24,11 +50,13 @@ const links = [
   { id: 'contact', label: '联络' },
 ]
 
+const mobileOpen = ref(false)
+
 const scrollTo = (id: string) => {
   const container = document.querySelector('.overflow-y-scroll')
   const target = document.getElementById(id)
   if (container && target) {
-    const navHeight = 52 // sticky nav 高度
+    const navHeight = 52
     container.scrollTo({
       top: (target as HTMLElement).offsetTop - navHeight,
       behavior: 'smooth',

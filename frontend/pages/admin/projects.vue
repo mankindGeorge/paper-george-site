@@ -9,46 +9,51 @@
         >{{ showForm ? '关闭' : '+ 新建' }}</button>
       </div>
 
-      <AdminForm
-        v-if="showForm"
-        :title="editingId ? '编辑项目' : '新建项目'"
-        :form="form"
-        submit-label="保存"
-        @submit="saveProject"
-        @cancel="resetForm"
-      >
-        <template #default>
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">标题</label>
-            <input v-model="form.title" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
-          </div>
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">描述</label>
-            <textarea v-model="form.description" rows="3" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint resize-y" />
-          </div>
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">标签 (逗号分隔)</label>
-            <input v-model="tagsInput" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
-          </div>
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">链接</label>
-            <input v-model="form.url" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
-          </div>
-        </template>
-      </AdminForm>
+      <div v-if="loading" class="text-center py-8 font-mono text-sm text-newsprint/60">加载中...</div>
+      <div v-else-if="error" class="text-center py-8 font-mono text-sm text-stamp">{{ error }}</div>
 
-      <AdminTable
-        :columns="columns"
-        :items="projects"
-        @edit="editProject"
-        @delete="deleteProject"
-      />
+      <template v-else>
+        <AdminForm
+          v-if="showForm"
+          :title="editingId ? '编辑项目' : '新建项目'"
+          :form="form"
+          submit-label="保存"
+          @submit="saveProject"
+          @cancel="resetForm"
+        >
+          <template #default>
+            <div>
+              <label class="font-mono text-xs uppercase tracking-widest block mb-1">标题</label>
+              <input v-model="form.title" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
+            </div>
+            <div>
+              <label class="font-mono text-xs uppercase tracking-widest block mb-1">描述</label>
+              <textarea v-model="form.description" rows="3" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint resize-y" />
+            </div>
+            <div>
+              <label class="font-mono text-xs uppercase tracking-widest block mb-1">标签 (逗号分隔)</label>
+              <input v-model="tagsInput" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
+            </div>
+            <div>
+              <label class="font-mono text-xs uppercase tracking-widest block mb-1">链接</label>
+              <input v-model="form.url" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
+            </div>
+          </template>
+        </AdminForm>
+
+        <AdminTable
+          :columns="columns"
+          :items="projects"
+          @edit="editProject"
+          @delete="confirmDelete"
+        />
+      </template>
     </div>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: false })
+definePageMeta({ layout: false, middleware: 'admin-auth' })
 
 const { get, post, put, del } = useApi()
 
@@ -56,6 +61,8 @@ const projects = ref<any[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
 const tagsInput = ref('')
+const loading = ref(true)
+const error = ref('')
 
 const form = reactive({ title: '', description: '', tags: [] as string[], url: '', sortOrder: 0 })
 
@@ -66,18 +73,30 @@ const columns = [
 ]
 
 const loadProjects = async () => {
-  projects.value = await get<any[]>('/api/projects')
+  loading.value = true
+  error.value = ''
+  try {
+    projects.value = await get<any[]>('/api/projects')
+  } catch (e: any) {
+    error.value = '加载失败: ' + (e?.data?.message || e?.message || '未知错误')
+  } finally {
+    loading.value = false
+  }
 }
 
 const saveProject = async () => {
-  form.tags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean)
-  if (editingId.value) {
-    await put(`/api/projects/${editingId.value}`, { ...form })
-  } else {
-    await post('/api/projects', { ...form })
+  try {
+    form.tags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean)
+    if (editingId.value) {
+      await put(`/api/projects/${editingId.value}`, { ...form })
+    } else {
+      await post('/api/projects', { ...form })
+    }
+    resetForm()
+    await loadProjects()
+  } catch (e: any) {
+    error.value = '保存失败: ' + (e?.data?.message || e?.message || '未知错误')
   }
-  resetForm()
-  await loadProjects()
 }
 
 const editProject = (item: any) => {
@@ -87,9 +106,14 @@ const editProject = (item: any) => {
   showForm.value = true
 }
 
-const deleteProject = async (id: number) => {
-  await del(`/api/projects/${id}`)
-  await loadProjects()
+const confirmDelete = async (id: number) => {
+  if (!confirm('确定要删除这个项目吗？此操作不可恢复。')) return
+  try {
+    await del(`/api/projects/${id}`)
+    await loadProjects()
+  } catch (e: any) {
+    error.value = '删除失败: ' + (e?.data?.message || e?.message || '未知错误')
+  }
 }
 
 const resetForm = () => {
