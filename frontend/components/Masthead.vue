@@ -1,7 +1,7 @@
 <template>
   <div class="border-b-4 border-double border-ink pt-8 pb-4 text-center">
     <!-- 标题逐字墨迹印刷 -->
-    <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tight uppercase leading-none">
+    <h1 class="font-headline text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-none whitespace-nowrap">
       <span
         v-for="(char, i) in titleChars"
         :key="i"
