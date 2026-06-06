@@ -12,7 +12,7 @@
           type="button"
           class="border-2 border-stamp/30 px-4 py-2 font-mono text-xs uppercase tracking-widest hover:border-stamp transition-colors"
           @click="$emit('cancel')"
-        >CANCEL</button>
+        >取消</button>
       </div>
     </form>
   </div>

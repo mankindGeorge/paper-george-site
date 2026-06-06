@@ -1,8 +1,8 @@
 <template>
   <NuxtLayout name="admin">
     <div class="space-y-6">
-      <h2 class="font-headline text-2xl text-stamp border-b-2 border-stamp pb-2">MESSAGES</h2>
-      <div v-if="messages.length === 0" class="font-mono text-sm text-newsprint/60">NO MESSAGES YET.</div>
+      <h2 class="font-headline text-2xl text-stamp border-b-2 border-stamp pb-2">留言管理</h2>
+      <div v-if="messages.length === 0" class="font-mono text-sm text-newsprint/60">暂无留言。</div>
       <div
         v-for="msg in messages"
         :key="msg.id"
@@ -22,7 +22,7 @@
           v-if="!msg.isRead"
           class="mt-3 font-mono text-xs text-stamp underline"
           @click="markRead(msg.id)"
-        >MARK AS READ</button>
+        >标为已读</button>
       </div>
     </div>
   </NuxtLayout>

@@ -2,6 +2,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts'],
+  css: ['~/assets/css/main.css'],
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:3001',
@@ -17,9 +18,9 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'Mankind George Chronicle',
+      title: 'Mankind George 纪事报',
       meta: [
-        { name: 'description', content: 'Portfolio and blog of Mankind George' },
+        { name: 'description', content: 'Mankind George 的个人作品集与博客' },
       ],
     },
   },

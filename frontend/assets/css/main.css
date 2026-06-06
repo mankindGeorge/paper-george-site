@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 补充 Tailwind 树摇丢失的 keyframes（在 main.css 中被引用但未在模板中直接使用） */
+@keyframes slide-in-left {
+  0% { transform: translateX(-40px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes tear-left {
+  0% { transform: translateX(0) rotate(0deg); }
+  100% { transform: translateX(-110%) rotate(-3deg); }
+}
+@keyframes tear-right {
+  0% { transform: translateX(0) rotate(0deg); }
+  100% { transform: translateX(110%) rotate(3deg); }
+}
+@keyframes float-in {
+  0% { transform: translate(-120%, -80%) rotate(-8deg); opacity: 0; }
+  60% { transform: translate(5%, 3%) rotate(1deg); opacity: 1; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
+@keyframes paper-lift {
+  0% { transform: scale(0.9) skewX(3deg); opacity: 0; }
+  100% { transform: scale(1) skewX(0deg); opacity: 1; }
+}
+@keyframes press-down {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.97) translateY(1px); }
+  100% { transform: scale(1); }
+}
+@keyframes slide-out {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(120%) rotate(3deg); opacity: 0; }
+}
+
 @layer base {
   body {
     @apply bg-newsprint text-ink font-body;
@@ -12,6 +44,157 @@
   }
 
   code, pre, .font-mono {
-    @apply font-mono;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
   }
+
+  /* 油墨选区样式 - 盖章暗红背景 + 报纸底色文字 */
+  ::selection {
+    background-color: #A64444;
+    color: #F2EFE9;
+  }
+  ::-moz-selection {
+    background-color: #A64444;
+    color: #F2EFE9;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 防止硬阴影被裁切 */
+.shadow-clip {
+  overflow: visible;
+}
+
+/* 撕裂纸边卡片 */
+.torn-card {
+  clip-path: polygon(
+    0% 3%, 2% 0%, 5% 4%, 8% 1%, 12% 5%, 15% 2%, 18% 6%, 22% 1%, 25% 4%, 28% 0%,
+    32% 3%, 35% 1%, 38% 5%, 42% 2%, 45% 6%, 48% 0%, 52% 4%, 55% 1%, 58% 5%, 62% 2%,
+    65% 6%, 68% 0%, 72% 3%, 75% 1%, 78% 5%, 82% 2%, 85% 4%, 88% 0%, 92% 3%, 95% 1%,
+    98% 4%, 100% 2%, 100% 97%, 98% 100%, 95% 96%, 92% 99%, 88% 97%, 85% 100%, 82% 96%,
+    78% 99%, 75% 97%, 72% 100%, 68% 96%, 65% 99%, 62% 97%, 58% 100%, 55% 96%, 52% 99%,
+    48% 97%, 45% 100%, 42% 96%, 38% 99%, 35% 97%, 32% 100%, 28% 96%, 25% 99%, 22% 97%,
+    18% 100%, 15% 96%, 12% 99%, 8% 97%, 5% 100%, 2% 96%, 0% 99%
+  );
+}
+
+/* 胶带装饰 */
+.tape-decoration::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 48px;
+  height: 16px;
+  background-color: #DCD7C9;
+  border: 1px solid #1E1E1E;
+  z-index: 10;
+}
+
+/* 图钉装饰 */
+.pin-decoration::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 12px;
+  height: 12px;
+  background-color: #1E1E1E;
+  border: 2px solid #A64444;
+  border-radius: 50%;
+  z-index: 10;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pin-decoration:hover::after {
+  transform: scale(1.3);
+}
+
+/* 纸角折叠 */
+.fold-corner::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent #DCD7C9 transparent;
+  filter: drop-shadow(-1px -1px 0px #1E1E1E);
+}
+
+/* 信纸横线 */
+.ruled-lines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 31px,
+    #1E1E1E 31px,
+    #1E1E1E 32px
+  );
+  background-position: 0 8px;
+}
+
+/* 墨迹高亮线 */
+.ink-highlight {
+  position: relative;
+}
+.ink-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: #A64444;
+  transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.ink-highlight:hover::after {
+  width: 100%;
+}
+
+/* 发牌入场动画 stagger */
+.deal-in {
+  opacity: 0;
+  animation: paper-lift 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.deal-in:nth-child(odd) {
+  animation-name: slide-in-left;
+}
+.deal-in:nth-child(even) {
+  animation-name: slide-in-right;
+}
+
+/* 半色调图片滤镜 */
+.halftone {
+  filter: grayscale(1) contrast(1.5);
+  image-rendering: pixelated;
+}
+.halftone:hover {
+  filter: none;
+  image-rendering: auto;
+}
+
+/* 报纸飘入动画 */
+.newspaper-float {
+  animation: float-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* 撕裂左半片 */
+.tear-half-left {
+  animation: tear-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* 撕裂右半片 */
+.tear-half-right {
+  animation: tear-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* 按压反馈 */
+.press-feedback:active {
+  animation: press-down 0.2s ease-out;
 }

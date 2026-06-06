@@ -15,6 +15,7 @@ export default {
         ink: '#1E1E1E',
         stamp: '#A64444',
         cardboard: '#DCD7C9',
+        parchment: '#E8DCC8',
       },
       fontFamily: {
         headline: ['"Playfair Display"', 'Georgia', 'serif'],
@@ -50,12 +51,60 @@ export default {
           '0%': { transform: 'translateY(0) rotate(0deg)', opacity: '1' },
           '100%': { transform: 'translateY(120%) rotate(3deg)', opacity: '0' },
         },
+        'ink-print': {
+          '0%': { opacity: '0', transform: 'scale(0.8)' },
+          '50%': { opacity: '1', transform: 'scale(1.05)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        'slide-in-right': {
+          '0%': { transform: 'translateX(40px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'slide-in-left': {
+          '0%': { transform: 'translateX(-40px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'tear-left': {
+          '0%': { transform: 'translateX(0) rotate(0deg)' },
+          '100%': { transform: 'translateX(-110%) rotate(-3deg)' },
+        },
+        'tear-right': {
+          '0%': { transform: 'translateX(0) rotate(0deg)' },
+          '100%': { transform: 'translateX(110%) rotate(3deg)' },
+        },
+        'float-in': {
+          '0%': { transform: 'translate(-120%, -80%) rotate(-8deg)', opacity: '0' },
+          '60%': { transform: 'translate(5%, 3%) rotate(1deg)', opacity: '1' },
+          '100%': { transform: 'translate(0, 0) rotate(0deg)', opacity: '1' },
+        },
+        'paper-lift': {
+          '0%': { transform: 'scale(0.9) skewX(3deg)', opacity: '0' },
+          '100%': { transform: 'scale(1) skewX(0deg)', opacity: '1' },
+        },
+        'fold-open': {
+          '0%': { transform: 'perspective(400px) rotateX(-90deg)', transformOrigin: 'top' },
+          '100%': { transform: 'perspective(400px) rotateX(0deg)', transformOrigin: 'top' },
+        },
+        'press-down': {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(0.97) translateY(1px)' },
+          '100%': { transform: 'scale(1)' },
+        },
       },
       animation: {
         unfold: 'unfold 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards',
         stamp: 'stamp-down 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         'spring-open': 'spring-open 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         'slide-out': 'slide-out 0.6s ease-in forwards',
+        'ink-print': 'ink-print 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+        'slide-in-right': 'slide-in-right 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards',
+        'slide-in-left': 'slide-in-left 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards',
+        'tear-left': 'tear-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+        'tear-right': 'tear-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+        'float-in': 'float-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards',
+        'paper-lift': 'paper-lift 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+        'fold-open': 'fold-open 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards',
+        'press-down': 'press-down 0.2s ease-out',
       },
     },
   },

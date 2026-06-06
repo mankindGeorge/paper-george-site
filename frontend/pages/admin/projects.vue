@@ -2,36 +2,36 @@
   <NuxtLayout name="admin">
     <div class="space-y-6">
       <div class="flex justify-between items-center border-b-2 border-stamp pb-2">
-        <h2 class="font-headline text-2xl text-stamp">PROJECTS</h2>
+        <h2 class="font-headline text-2xl text-stamp">项目管理</h2>
         <button
           class="border-2 border-stamp px-4 py-1 font-mono text-xs uppercase tracking-widest hover:bg-stamp hover:text-ink transition-colors"
           @click="showForm = !showForm"
-        >{{ showForm ? 'CLOSE' : '+ NEW' }}</button>
+        >{{ showForm ? '关闭' : '+ 新建' }}</button>
       </div>
 
       <AdminForm
         v-if="showForm"
-        :title="editingId ? 'EDIT PROJECT' : 'NEW PROJECT'"
+        :title="editingId ? '编辑项目' : '新建项目'"
         :form="form"
-        submit-label="SAVE"
+        submit-label="保存"
         @submit="saveProject"
         @cancel="resetForm"
       >
         <template #default>
           <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">Title</label>
+            <label class="font-mono text-xs uppercase tracking-widest block mb-1">标题</label>
             <input v-model="form.title" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
           </div>
           <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">Description</label>
+            <label class="font-mono text-xs uppercase tracking-widest block mb-1">描述</label>
             <textarea v-model="form.description" rows="3" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint resize-y" />
           </div>
           <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">Tags (comma-separated)</label>
+            <label class="font-mono text-xs uppercase tracking-widest block mb-1">标签 (逗号分隔)</label>
             <input v-model="tagsInput" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
           </div>
           <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">URL</label>
+            <label class="font-mono text-xs uppercase tracking-widest block mb-1">链接</label>
             <input v-model="form.url" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
           </div>
         </template>
@@ -60,9 +60,9 @@ const tagsInput = ref('')
 const form = reactive({ title: '', description: '', tags: [] as string[], url: '', sortOrder: 0 })
 
 const columns = [
-  { key: 'title', label: 'Title' },
-  { key: 'description', label: 'Description' },
-  { key: 'tags', label: 'Tags' },
+  { key: 'title', label: '标题' },
+  { key: 'description', label: '描述' },
+  { key: 'tags', label: '标签' },
 ]
 
 const loadProjects = async () => {

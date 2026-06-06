@@ -2,10 +2,10 @@
   <NuxtLayout name="admin">
     <div class="min-h-[80vh] flex items-center justify-center">
       <div class="w-full max-w-sm border-2 border-stamp p-8">
-        <h2 class="font-headline text-2xl text-center mb-6 text-stamp">CONTROL DESK ACCESS</h2>
+        <h2 class="font-headline text-2xl text-center mb-6 text-stamp">控制台登录</h2>
         <form @submit.prevent="handleLogin" class="space-y-4">
           <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">Username</label>
+            <label class="font-mono text-xs uppercase tracking-widest block mb-1">用户名</label>
             <input
               v-model="username"
               type="text"
@@ -13,7 +13,7 @@
             />
           </div>
           <div>
-            <label class="font-mono text-xs uppercase tracking-widest block mb-1">Password</label>
+            <label class="font-mono text-xs uppercase tracking-widest block mb-1">密码</label>
             <input
               v-model="password"
               type="password"
@@ -24,7 +24,7 @@
           <button
             type="submit"
             class="w-full border-2 border-stamp text-stamp py-2 font-headline uppercase tracking-wider hover:bg-stamp hover:text-ink transition-colors"
-          >AUTHENTICATE</button>
+          >登录认证</button>
         </form>
       </div>
     </div>
@@ -44,7 +44,7 @@ const handleLogin = async () => {
     await login(username.value, password.value)
     navigateTo('/admin')
   } catch (e) {
-    error.value = 'ACCESS DENIED — INVALID CREDENTIALS'
+    error.value = '访问被拒绝 — 凭据无效'
   }
 }
 </script>
