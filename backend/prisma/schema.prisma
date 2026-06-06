@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model Experience {
+  id              Int      @id @default(autoincrement())
+  columnType      String
+  year            String
+  title           String
+  contentMarkdown String   @default("")
+  stampStatus     String   @default("published")
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([columnType])
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  tags        String[]
+  url         String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Scrap {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  rotation  Float    @default(0)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  body      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
