@@ -77,16 +77,38 @@
 
       <!-- Section 5: Letter to the Editor (Contact) -->
       <section id="contact" class="min-h-full flex items-center justify-center">
-        <div class="w-full max-w-lg bg-parchment border-2 border-ink p-8 relative mx-4 shadow-hard">
+        <div class="w-full max-w-lg bg-parchment border-2 border-ink p-8 relative mx-4 shadow-hard overflow-visible">
           <h2 class="font-headline text-3xl font-black text-center mb-2">致编辑的信</h2>
           <p class="text-center font-mono text-xs text-ink/60 mb-8 uppercase tracking-widest">通信与咨询</p>
 
-          <!-- 表单：提交后折叠收起 -->
+          <!-- 信封打封 + 风吹走动画 -->
+          <div v-if="submitted && !formFolded" class="absolute inset-0 flex items-center justify-center z-40 pointer-events-none envelope-wrap">
+            <svg class="w-48 h-auto envelope-body" viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 信封主体 -->
+              <rect x="10" y="40" width="180" height="95" rx="3" fill="#E8DCC8" stroke="#1E1E1E" stroke-width="2"/>
+              <!-- 三角翻盖 -->
+              <polygon points="10,40 100,95 190,40" fill="#DCD7C9" stroke="#1E1E1E" stroke-width="2"/>
+              <!-- 信纸内容线 -->
+              <line x1="40" y1="70" x2="160" y2="70" stroke="#1E1E1E" stroke-width="0.8" opacity="0.2"/>
+              <line x1="40" y1="82" x2="140" y2="82" stroke="#1E1E1E" stroke-width="0.8" opacity="0.2"/>
+              <line x1="40" y1="94" x2="120" y2="94" stroke="#1E1E1E" stroke-width="0.8" opacity="0.2"/>
+              <!-- 火漆封印 -->
+              <g class="wax-seal">
+                <circle cx="100" cy="85" r="18" fill="#A64444" stroke="#1E1E1E" stroke-width="1.5"/>
+                <circle cx="100" cy="85" r="12" fill="none" stroke="#F2EFE9" stroke-width="1" opacity="0.6"/>
+                <!-- 封印裂纹 -->
+                <line x1="88" y1="80" x2="95" y2="85" stroke="#F2EFE9" stroke-width="1.5" opacity="0.8"/>
+                <line x1="105" y1="82" x2="112" y2="88" stroke="#F2EFE9" stroke-width="1.5" opacity="0.8"/>
+                <line x1="96" y1="90" x2="104" y2="95" stroke="#F2EFE9" stroke-width="1" opacity="0.6"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- 表单：提交后立即隐藏 -->
           <form
-            v-show="!formFolded"
+            v-if="!submitted"
             @submit.prevent="handleSubmit"
             class="space-y-6 relative z-10"
-            :style="submitted ? 'transform: perspective(400px) rotateX(-90deg); transform-origin: top; transition: transform 0.5s ease; pointer-events: none;' : ''"
           >
             <div>
               <label class="font-mono text-xs uppercase tracking-widest block mb-1">您的姓名</label>
@@ -133,8 +155,8 @@
             </button>
           </form>
 
-          <!-- 成功反馈：盖章动画 -->
-          <div v-if="submitted" class="flex flex-col items-center justify-center py-8 animate-stamp">
+          <!-- 成功反馈：盖章动画（信封离开屏幕后才显示） -->
+          <div v-if="submitted && formFolded" class="flex flex-col items-center justify-center py-8 animate-stamp">
             <StampSeal text="已寄出" size="lg" />
             <p class="font-headline text-xl font-bold mt-4">您的来信已收到</p>
             <p class="font-mono text-sm text-ink/60 mt-2">感谢您的留言，我会尽快回复。</p>
@@ -197,8 +219,8 @@ const handleSubmit = async () => {
   try {
     await post('/api/messages', form)
     submitted.value = true
-    // 折叠动画完成后切换到成功提示
-    setTimeout(() => { formFolded.value = true }, 500)
+    // 等信封打封+风吹走动画完成后（4.5s）再切换到成功提示
+    setTimeout(() => { formFolded.value = true }, 4500)
   } catch (e) {
     console.error(e)
   } finally {
@@ -273,3 +295,42 @@ onMounted(() => {
   el.addEventListener('scroll', onScroll, { passive: true })
 })
 </script>
+
+<style>
+/* 信封出现 */
+.envelope-wrap {
+  animation: envelope-appear 0.5s ease-out forwards;
+}
+@keyframes envelope-appear {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* 火漆封印破开 */
+.wax-seal {
+  animation: seal-crack 0.8s 0.5s ease-in-out forwards;
+  transform-origin: 100px 85px;
+}
+@keyframes seal-crack {
+  0% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.3) rotate(-8deg); }
+  40% { transform: scale(1.05) rotate(5deg); }
+  60% { transform: scale(1.2) rotate(-3deg); }
+  80% { transform: scale(1.1) rotate(2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+}
+
+/* 整个信封被风吹走 */
+.envelope-body {
+  animation: wind-blow 3s 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  transform-origin: center center;
+}
+@keyframes wind-blow {
+  0% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+  10% { transform: translateX(8px) translateY(-4px) rotate(3deg); opacity: 1; }
+  20% { transform: translateX(-6px) translateY(3px) rotate(-4deg); opacity: 1; }
+  35% { transform: translateX(-15vw) translateY(-5vh) rotate(-10deg); opacity: 1; }
+  60% { transform: translateX(-50vw) translateY(-15vh) rotate(-18deg); opacity: 0.8; }
+  100% { transform: translateX(-120vw) translateY(-25vh) rotate(-25deg); opacity: 0; }
+}
+</style>

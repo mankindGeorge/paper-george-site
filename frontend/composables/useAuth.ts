@@ -7,26 +7,22 @@ export const useAuth = () => {
     const result = await $fetch<{ access_token: string }>(`${config.public.apiBase}/api/auth/login`, {
       method: 'POST',
       body: { username, password },
+      credentials: 'include',
     })
     token.value = result.access_token
-    if (import.meta.client) {
-      localStorage.setItem('auth-token', result.access_token)
-    }
   }
 
   const logout = () => {
     token.value = null
     if (import.meta.client) {
-      localStorage.removeItem('auth-token')
+      document.cookie = 'auth-token=; path=/; max-age=0'
     }
     navigateTo('/admin/login')
   }
 
   const init = () => {
-    if (import.meta.client) {
-      const stored = localStorage.getItem('auth-token')
-      if (stored) token.value = stored
-    }
+    // Token is in httpOnly cookie, we just set the reactive state from the login response
+    // On page refresh, the cookie is sent automatically by the browser
   }
 
   const authHeaders = computed(() => token.value ? { Authorization: `Bearer ${token.value}` } : {})

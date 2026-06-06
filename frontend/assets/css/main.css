@@ -127,18 +127,6 @@ html {
   filter: drop-shadow(-1px -1px 0px #1E1E1E);
 }
 
-/* 信纸横线 */
-.ruled-lines {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent 31px,
-    #1E1E1E 31px,
-    #1E1E1E 32px
-  );
-  background-position: 0 8px;
-}
-
 /* 墨迹高亮线 */
 .ink-highlight {
   position: relative;
