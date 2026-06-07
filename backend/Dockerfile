@@ -6,7 +6,8 @@ COPY . .
 RUN npx prisma generate
 RUN npm run build
 
-FROM node:20
+FROM node:20-slim
+RUN apt-get update -y && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
