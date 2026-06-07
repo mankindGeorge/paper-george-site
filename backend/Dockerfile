@@ -1,18 +1,17 @@
-FROM node:20 AS builder
+FROM node:18-bullseye AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 RUN npx prisma generate
 RUN npm run build
 
-FROM node:20
+FROM node:18-bullseye
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
 RUN mkdir -p /app/uploads
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
 EXPOSE 3001
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]

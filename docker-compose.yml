@@ -15,7 +15,6 @@ services:
 
   backend:
     build: ./backend
-    platform: linux/amd64
     environment:
       DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres-db:5432/mankind_george
       JWT_SECRET: ${JWT_SECRET}
