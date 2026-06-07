@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateScrapDto {
   @IsString()
@@ -19,8 +19,4 @@ export class CreateScrapDto {
   @IsNumber()
   @IsOptional()
   sortOrder?: number;
-
-  @IsBoolean()
-  @IsOptional()
-  featured?: boolean;
 }

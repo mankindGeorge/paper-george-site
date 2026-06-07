@@ -184,9 +184,9 @@ const [projectsData, scrapsData, experiencesData] = await Promise.all([
   get<any[]>('/api/experiences'),
 ])
 
-const projects = ref(projectsData.filter((p: any) => p.featured))
-const scraps = ref(scrapsData.filter((s: any) => s.featured))
-const experiences = ref(experiencesData.filter((e: any) => e.featured))
+const projects = ref(projectsData)
+const scraps = ref(scrapsData)
+const experiences = ref(experiencesData)
 
 // 项目共享状态：控制哪个项目正在打开
 const activeProjectId = ref<number | null>(null)

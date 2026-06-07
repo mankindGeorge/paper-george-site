@@ -46,7 +46,6 @@
           :items="projects"
           @edit="editProject"
           @delete="confirmDelete"
-          @toggle-featured="toggleFeatured"
         />
       </template>
     </div>
@@ -65,7 +64,7 @@ const tagsInput = ref('')
 const loading = ref(true)
 const error = ref('')
 
-const form = reactive({ title: '', description: '', tags: [] as string[], url: '', sortOrder: 0, featured: false })
+const form = reactive({ title: '', description: '', tags: [] as string[], url: '', sortOrder: 0 })
 
 const columns = [
   { key: 'title', label: '标题' },
@@ -118,19 +117,10 @@ const confirmDelete = async (id: number) => {
 }
 
 const resetForm = () => {
-  Object.assign(form, { title: '', description: '', tags: [], url: '', sortOrder: 0, featured: false })
+  Object.assign(form, { title: '', description: '', tags: [], url: '', sortOrder: 0 })
   tagsInput.value = ''
   editingId.value = null
   showForm.value = false
-}
-
-const toggleFeatured = async (item: any) => {
-  try {
-    await put(`/api/projects/${item.id}`, { featured: !item.featured })
-    await loadProjects()
-  } catch (e: any) {
-    error.value = '更新失败: ' + (e?.data?.message || e?.message || '未知错误')
-  }
 }
 
 onMounted(loadProjects)

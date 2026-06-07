@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsArray, IsBoolean } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsArray } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -18,8 +18,4 @@ export class CreateProjectDto {
   @IsNumber()
   @IsOptional()
   sortOrder?: number;
-
-  @IsBoolean()
-  @IsOptional()
-  featured?: boolean;
 }
