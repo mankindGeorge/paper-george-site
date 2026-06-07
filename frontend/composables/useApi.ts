@@ -1,6 +1,8 @@
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const apiBase = config.public.apiBase as string
+  const apiBase = import.meta.server
+    ? (config.apiBaseDirect as string)
+    : (config.public.apiBase as string)
   const { token } = useAuth()
 
   const getHeaders = () => token.value ? { Authorization: `Bearer ${token.value}` } : {}

@@ -22,7 +22,7 @@
       <h3 class="font-headline text-xl md:text-lg font-bold border-b border-ink/30 pb-1 mb-2">{{ scrap.title }}</h3>
       <img
         v-if="scrap.imageUrl"
-        :src="scrap.imageUrl"
+        :src="fullImageUrl(scrap.imageUrl)"
         :alt="scrap.title"
         class="w-full h-auto object-cover border border-ink/20 mb-2 grayscale hover:grayscale-0 transition-all duration-300"
       />
@@ -44,6 +44,9 @@ const emit = defineEmits<{
 
 const pinned = computed(() => props.pinnedId === props.scrap.id)
 const otherPinned = computed(() => props.pinnedId !== null && props.pinnedId !== props.scrap.id)
+
+const config = useRuntimeConfig()
+const fullImageUrl = (url: string) => url.startsWith('/api/') ? `${config.public.apiBase}${url}` : url
 
 const togglePin = () => {
   emit('pin', pinned.value ? null : props.scrap.id)

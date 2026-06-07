@@ -42,7 +42,7 @@ model Project {
 model Scrap {
   id        Int      @id @default(autoincrement())
   title     String
-  content   String
+  content   String   @default("")
   imageUrl  String?
   rotation  Float    @default(0)
   sortOrder Int      @default(0)

@@ -1,6 +1,6 @@
 <template>
   <div class="relative border-2 border-ink bg-parchment overflow-visible" :id="`project-${project.id}`">
-    <!-- 未展开：报纸卡片 -->
+    <!-- 未展开：报纸卡片 - 只显示标题，但保持与展开后相同大小 -->
     <div
       v-if="state === 'idle'"
       class="relative newspaper-card"
@@ -8,21 +8,14 @@
     >
       <div class="p-4">
         <h3 class="font-headline text-xl font-bold border-b-2 border-ink pb-2 mb-2">{{ project.title }}</h3>
-        <p class="text-sm leading-relaxed font-body mb-3">{{ project.description }}</p>
-        <a
-          v-if="project.url"
-          :href="project.url"
-          target="_blank"
-          class="font-mono text-xs text-stamp underline"
-          @click.stop
-        >查看项目 &rarr;</a>
+        <p class="text-sm leading-relaxed font-body mb-3 invisible">{{ project.description }}</p>
+        <p class="font-mono text-xs text-ink/40 text-center">[ 点击展开查看详情 ]</p>
       </div>
-      <PerforatedLine :tags="project.tags" />
     </div>
 
     <!-- 撕裂 + 展示：底层内容 + 顶层纸张碎片 -->
     <template v-if="state === 'tearing' || state === 'revealed'">
-      <!-- 底层：内容（点击展开详情） -->
+      <!-- 底层：完整内容 -->
       <div
         class="p-4 bg-cardboard cursor-pointer"
         @click="expanded = true"
@@ -30,7 +23,13 @@
         <h3 class="font-headline text-xl font-bold mb-2">{{ project.title }}</h3>
         <p class="text-sm leading-relaxed font-body mb-3">{{ project.description }}</p>
         <PerforatedLine :tags="project.tags" />
-        <p class="font-mono text-xs text-ink/50 mt-3 text-center">点击展开查看完整内容</p>
+        <a
+          v-if="project.url"
+          :href="project.url"
+          target="_blank"
+          class="font-mono text-xs text-stamp underline"
+          @click.stop
+        >查看项目 &rarr;</a>
       </div>
 
       <!-- 顶层：撕裂中的纸张碎片（遮罩，裂开时露出下面内容） -->
@@ -89,13 +88,12 @@
       class="fixed inset-0 z-[90] pointer-events-none"
     >
       <div
-        class="absolute bg-parchment border-4 border-ink shadow-hard-lg overflow-hidden float-paper"
+        class="absolute bg-parchment border-2 border-ink shadow-hard-lg float-paper"
         :style="floatStyle"
       >
-        <div class="p-6">
-          <h3 class="font-headline text-2xl font-black border-b-2 border-ink pb-2 mb-3">{{ project.title }}</h3>
-          <p class="text-base leading-relaxed font-body mb-4">{{ project.description }}</p>
-          <PerforatedLine :tags="project.tags" />
+        <div class="p-4">
+          <h3 class="font-headline text-xl font-bold border-b-2 border-ink pb-2 mb-2">{{ floatProject?.title }}</h3>
+          <p class="font-mono text-xs text-ink/50 text-center">[ 点击展开查看详情 ]</p>
         </div>
       </div>
     </div>
@@ -108,11 +106,13 @@ const props = defineProps<{
 }>()
 
 const activeProjectId = inject<Ref<number | null>>('activeProjectId', ref(null))
+const allProjects = inject<Ref<any[]>>('allProjects', ref([]))
 
 const state = ref<'idle' | 'tearing' | 'revealed'>('idle')
 const expanded = ref(false)
 const showFloatOverlay = ref(false)
 const floatStyle = ref('')
+const floatProject = ref<{ title: string; description: string; tags: string[] } | null>(null)
 
 const handleClick = () => {
   if (state.value !== 'idle') return
@@ -122,12 +122,18 @@ const handleClick = () => {
   expanded.value = false
 
   if (switching) {
-    // 1. 保存旧卡片位置（此时旧卡片还在 revealed 状态，DOM 完整）
+    // 1. 保存旧卡片位置，从数据中获取旧项目内容
     const oldEl = document.getElementById(`project-${prevId}`)
     const rect = oldEl?.getBoundingClientRect()
+    const oldProject = allProjects.value.find((p: any) => p.id === prevId)
 
-    // 2. 飘入覆盖旧项目（先飘，不改 activeProjectId，旧卡片保持 revealed）
-    if (rect) {
+    // 2. 飘入覆盖旧项目（显示旧卡片的未展开状态：只有标题）
+    if (rect && oldProject) {
+      floatProject.value = {
+        title: oldProject.title,
+        description: '',
+        tags: [],
+      }
       floatStyle.value = `top:${rect.top}px;left:${rect.left}px;width:${rect.width}px;height:${rect.height}px;`
       showFloatOverlay.value = true
 

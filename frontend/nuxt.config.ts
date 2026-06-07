@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts'],
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
+    apiBaseDirect: process.env.NUXT_API_BASE_DIRECT || 'http://localhost:3001',
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
     },

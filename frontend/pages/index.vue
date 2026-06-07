@@ -193,6 +193,7 @@ const activeProjectId = ref<number | null>(null)
 const revealedIds = ref(new Set<number>())
 provide('activeProjectId', activeProjectId)
 provide('revealedIds', revealedIds)
+provide('allProjects', projects)
 
 const gridItems = computed(() => {
   const items: any[] = []
