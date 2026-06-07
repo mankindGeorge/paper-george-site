@@ -5,7 +5,7 @@
         <h2 class="font-headline text-2xl text-stamp">剪报管理</h2>
         <button
           class="border-2 border-stamp px-4 py-1 font-mono text-xs uppercase tracking-widest hover:bg-stamp hover:text-ink transition-colors"
-          @click="showForm = !showForm"
+          @click="openNewForm"
         >{{ showForm ? '关闭' : '+ 新建' }}</button>
       </div>
 
@@ -134,8 +134,17 @@ const confirmDelete = async (id: number) => {
   }
 }
 
+const openNewForm = () => {
+  if (showForm.value) {
+    showForm.value = false
+  } else {
+    resetForm()
+    showForm.value = true
+  }
+}
+
 const resetForm = () => {
-  Object.assign(form, { title: '', content: '', imageUrl: '', rotation: 0, sortOrder: 0 })
+  Object.assign(form, { title: '', content: '', imageUrl: '', rotation: 0, sortOrder: scraps.value.length })
   editingId.value = null
   showForm.value = false
 }
