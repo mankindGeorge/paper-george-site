@@ -25,7 +25,6 @@ async function main() {
       // 早期探索与学术记录
       { columnType: 'early', year: '2024', title: '入学广东财经大学', contentMarkdown: '2024年9月，正式成为广东财经大学数字经济学院的一员，就读数据科学与大数据技术（智能计算）专业。从广东揭阳惠来来到广州&佛山，开启人生新篇章。', stampStatus: 'published', sortOrder: 1 },
       { columnType: 'early', year: '2024', title: '初识编程世界', contentMarkdown: '大一入学后第一次接触Python编程，从"Hello World"开始，逐步理解变量、循环、函数的概念。虽然一开始写代码总是报错，但每次解决问题都充满成就感。', stampStatus: 'published', sortOrder: 2 },
-      { columnType: 'early', year: '2025', title: '数据思维觉醒', contentMarkdown: '在《数据科学导论》课程中，第一次理解了数据背后的商业价值。开始用数据思维看待日常问题，发现生活中处处都有可以被量化的信息。', stampStatus: 'published', sortOrder: 3 },
 
       // 工程实践与深度研究
       { columnType: 'engineering', year: '2025', title: '第一个数据分析项目', contentMarkdown: '使用Python + Pandas + Matplotlib完成了第一个完整的数据分析项目，从数据清洗到可视化输出。虽然过程坎坷，但第一次看到自己生成的图表时，感受到了数据可视化的魅力。', stampStatus: 'published', sortOrder: 1 },
@@ -33,7 +32,7 @@ async function main() {
       { columnType: 'engineering', year: '2025', title: '全栈开发入门', contentMarkdown: '为了更好地展示自己的项目和学习成果，开始学习Web开发。从HTML/CSS/JavaScript基础到Vue.js框架，再到Node.js后端，逐渐建立起全栈开发的知识体系。', stampStatus: 'published', sortOrder: 3 },
 
       // 开源宣言与基础设施编年
-      { columnType: 'open-source', year: '2024', title: '拥抱开源文化', contentMarkdown: '加入学校技术社团后，第一次接触到GitHub和开源社区。学会了使用Git进行版本控制，理解了Pull Request、Code Review等协作流程，被开源社区的协作精神深深打动。', stampStatus: 'published', sortOrder: 1 },
+      { columnType: 'open-source', year: '2024', title: '拥抱开源文化', contentMarkdown: '第一次接触到GitHub和开源社区。学会了使用Git进行版本控制，理解了Pull Request、Code Review等协作流程，被开源社区的协作精神深深打动。', stampStatus: 'published', sortOrder: 1 },
       { columnType: 'open-source', year: '2025', title: 'Paper George 诞生', contentMarkdown: '受到报纸排版美学的启发，决定用代码打造一个报纸风格的个人作品集网站。融合了NestJS后端、Nuxt 3前端、Prisma ORM和PostgreSQL数据库，完整实践了全栈开发流程。', stampStatus: 'published', sortOrder: 2 },
       { columnType: 'open-source', year: '2025', title: '持续进步中', contentMarkdown: 'ENFJ人格驱动着我不断探索新领域。积极开朗的性格让我在团队协作中如鱼得水，充满好奇心则推动我持续学习。数据科学的道路还很长，但我一直在努力进步。', stampStatus: 'published', sortOrder: 3 },
     ],
