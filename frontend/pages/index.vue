@@ -35,7 +35,7 @@
           <h2 class="font-headline text-3xl md:text-4xl font-black text-center mb-8 border-y-4 md:border-b-4 md:border-t-0 border-double border-ink pb-4">
             编辑剪报
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto overflow-visible">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto overflow-visible items-start">
             <ScrapCard v-for="(scrap, i) in scraps" :key="scrap.id" :scrap="scrap" :index="i" />
           </div>
         </div>

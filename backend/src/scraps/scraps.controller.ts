@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, ParseIntPipe, BadRequestException } from '@nestjs/common';
 import { ScrapsService } from './scraps.service';
 import { CreateScrapDto } from './dto/create-scrap.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -15,12 +15,18 @@ export class ScrapsController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() dto: CreateScrapDto) {
+    if (!dto.content && !dto.imageUrl) {
+      throw new BadRequestException('内容和图片至少填写一项');
+    }
     return this.scrapsService.create(dto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<CreateScrapDto>) {
+    if (!dto.content && !dto.imageUrl) {
+      throw new BadRequestException('内容和图片至少填写一项');
+    }
     return this.scrapsService.update(id, dto);
   }
 

@@ -5,7 +5,12 @@ export class CreateScrapDto {
   title: string;
 
   @IsString()
-  content: string;
+  @IsOptional()
+  content?: string;
+
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
 
   @IsNumber()
   @IsOptional()

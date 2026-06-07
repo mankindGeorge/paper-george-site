@@ -43,6 +43,7 @@ model Scrap {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
+  imageUrl  String?
   rotation  Float    @default(0)
   sortOrder Int      @default(0)
   createdAt DateTime @default(now())
@@ -63,4 +64,10 @@ enum StampStatus {
   published
   draft
   archived
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
 }

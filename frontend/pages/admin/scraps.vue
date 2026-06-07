@@ -27,6 +27,23 @@
               <input v-model="form.title" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint" />
             </div>
             <div>
+              <label class="font-mono text-xs uppercase tracking-widest block mb-1">图片 (可选)</label>
+              <div class="flex items-center gap-4">
+                <label class="border-2 border-stamp/50 border-dashed px-4 py-2 font-mono text-xs text-newsprint/60 cursor-pointer hover:border-stamp transition-colors">
+                  选择图片
+                  <input type="file" accept="image/*" class="hidden" @change="handleImageUpload" />
+                </label>
+                <span v-if="form.imageUrl" class="font-mono text-xs text-stamp">已上传</span>
+                <button
+                  v-if="form.imageUrl"
+                  type="button"
+                  class="font-mono text-xs text-stamp/60 hover:text-stamp"
+                  @click="removeImage"
+                >移除</button>
+              </div>
+              <img v-if="form.imageUrl" :src="form.imageUrl" class="mt-2 h-20 object-cover border border-stamp/30" />
+            </div>
+            <div>
               <label class="font-mono text-xs uppercase tracking-widest block mb-1">内容</label>
               <textarea v-model="form.content" rows="4" class="w-full bg-ink border-2 border-stamp p-2 font-mono text-sm text-newsprint resize-y" />
             </div>
@@ -58,6 +75,8 @@
 definePageMeta({ layout: false, middleware: 'admin-auth' })
 
 const { get, post, put, del } = useApi()
+const { token } = useAuth()
+const config = useRuntimeConfig()
 
 const scraps = ref<any[]>([])
 const showForm = ref(false)
@@ -65,7 +84,7 @@ const editingId = ref<number | null>(null)
 const loading = ref(true)
 const error = ref('')
 
-const form = reactive({ title: '', content: '', rotation: 0, sortOrder: 0 })
+const form = reactive({ title: '', content: '', imageUrl: '', rotation: 0, sortOrder: 0 })
 
 const columns = [
   { key: 'title', label: '标题' },
@@ -116,9 +135,34 @@ const confirmDelete = async (id: number) => {
 }
 
 const resetForm = () => {
-  Object.assign(form, { title: '', content: '', rotation: 0, sortOrder: 0 })
+  Object.assign(form, { title: '', content: '', imageUrl: '', rotation: 0, sortOrder: 0 })
   editingId.value = null
   showForm.value = false
+}
+
+const handleImageUpload = async (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+
+  const formData = new FormData()
+  formData.append('file', file)
+
+  try {
+    const result = await $fetch<{ url: string }>(`${config.public.apiBase}/api/uploads`, {
+      method: 'POST',
+      body: formData,
+      headers: token.value ? { Authorization: `Bearer ${token.value}` } : {},
+      credentials: 'include',
+    })
+    form.imageUrl = result.url
+  } catch (e: any) {
+    error.value = '图片上传失败: ' + (e?.data?.message || e?.message || '未知错误')
+  }
+}
+
+const removeImage = () => {
+  form.imageUrl = ''
 }
 
 onMounted(loadScraps)

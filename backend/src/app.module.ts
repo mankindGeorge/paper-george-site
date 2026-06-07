@@ -10,6 +10,8 @@ import { ScrapsModule } from './scraps/scraps.module';
 import { MessagesModule } from './messages/messages.module';
 import { MailModule } from './mail/mail.module';
 import { HealthModule } from './health/health.module';
+import { UploadsModule } from './uploads/uploads.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { HealthModule } from './health/health.module';
     MessagesModule,
     MailModule,
     HealthModule,
+    UploadsModule,
+    SettingsModule,
   ],
   providers: [
     {

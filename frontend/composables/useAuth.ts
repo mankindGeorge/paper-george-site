@@ -27,9 +27,6 @@ export const useAuth = () => {
         await $fetch<{ user: any }>(`${config.public.apiBase}/api/auth/validate`, {
           credentials: 'include',
         })
-        // If cookie is valid but token state is lost, we need to re-login
-        // The httpOnly cookie exists but we can't read it client-side
-        // The admin layout will handle redirect if needed
       } catch {
         // Cookie is invalid or expired, stay unauthenticated
       }

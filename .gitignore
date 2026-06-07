@@ -32,3 +32,7 @@ yarn-error.log*
 
 # Prisma
 backend/prisma/migrations/
+
+# Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep

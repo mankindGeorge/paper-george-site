@@ -30,6 +30,7 @@ paper-george-site/
 │   ├── pages/              # 页面路由
 │   └── Dockerfile
 ├── docker-compose.yml
+├── nginx.conf
 └── README.md
 ```
 
@@ -121,22 +122,41 @@ npm run dev          # 开发模式
 一键启动所有服务：
 
 ```bash
-# 创建环境变量文件
+# 1. 创建环境变量文件
 cp backend/.env.example .env
-# 编辑 .env 填入配置
+# 编辑 .env 填入配置（JWT_SECRET、SMTP 等）
 
-# 启动
+# 2. 创建 SSL 证书目录（HTTPS 需要）
+mkdir -p ssl
+# 将证书放入 ssl/cert.pem 和 ssl/key.pem
+# 自签名测试证书：openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ssl/key.pem -out ssl/cert.pem
+
+# 3. 启动
 docker-compose up -d
 
-# 初始化数据库（首次启动）
+# 4. 初始化数据库（首次启动）
 docker-compose exec backend npx prisma migrate deploy
 docker-compose exec backend npm run prisma:seed
 ```
 
 Docker 服务说明：
-- `postgres-db`: PostgreSQL 数据库（端口 5433）
-- `backend`: NestJS API 服务（端口 3001）
-- `frontend`: Nuxt 前端（端口 3000）
+- `nginx`: Nginx 反向代理（端口 80/443）
+- `frontend`: Nuxt 前端（内部端口 3000）
+- `backend`: NestJS API 服务（内部端口 3001）
+- `postgres-db`: PostgreSQL 数据库
+
+### 更改端口
+
+修改 `docker-compose.yml` 中 nginx 的端口映射：
+
+```yaml
+nginx:
+  ports:
+    - "8080:80"     # 改为 8080
+    - "8443:443"    # 改为 8443
+```
+
+如需 HTTPS，将证书放入 `ssl/` 目录，Nginx 会自动加载 `ssl/cert.pem` 和 `ssl/key.pem`。
 
 ## API 接口
 
