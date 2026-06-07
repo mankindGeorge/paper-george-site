@@ -26,6 +26,7 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
       SMTP_FROM: ${SMTP_FROM}
+      PRISMA_CLI_QUERY_ENGINE_TYPE: library
     volumes:
       - uploads:/app/uploads
     depends_on:
@@ -45,7 +46,6 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
     depends_on:
       - frontend
       - backend
