@@ -45,7 +45,6 @@ async function main() {
       { title: 'Paper George 纪事报', description: '报纸风格的个人作品集与博客网站，融合了复古排版美学与现代Web技术。使用Nuxt 3 + NestJS + Prisma + PostgreSQL全栈开发，支持SSR渲染、JWT认证、文件上传等功能。', tags: ['Nuxt 3', 'NestJS', 'Prisma', 'PostgreSQL', 'TypeScript'], sortOrder: 1 },
       { title: '校园数据分析仪表盘', description: '基于Python的数据分析课程项目，对校园消费数据进行清洗、分析和可视化。使用Pandas处理数据，Matplotlib生成图表，直观展示学生消费行为模式。', tags: ['Python', 'Pandas', 'Matplotlib', '数据分析'], sortOrder: 2 },
       { title: '智能推荐系统原型', description: '课程实践项目，基于协同过滤算法实现简单的推荐系统原型。从数据预处理到模型训练，完整走通机器学习项目流程，深入理解推荐算法的工作原理。', tags: ['Python', 'Scikit-learn', '机器学习', '推荐系统'], sortOrder: 3 },
-      { title: '班级信息管理平台', description: '团队协作开发的班级信息管理Web应用，支持学生信息录入、成绩查询、通知公告等功能。负责前端页面开发和数据库设计，锻炼了团队协作和项目管理能力。', tags: ['Vue.js', 'Node.js', 'MySQL', '团队协作'], sortOrder: 4 },
     ],
   });
 
