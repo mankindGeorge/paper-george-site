@@ -179,7 +179,7 @@ watch(activeProjectId, (newId) => {
 }
 .newspaper-card:hover {
   transform: translateY(-2px);
-  box-shadow: 5px 5px 0px #1E1E1E;
+  z-index: 10;
 }
 
 .tear-half-left {
