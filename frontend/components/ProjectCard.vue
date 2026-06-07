@@ -1,5 +1,5 @@
 <template>
-  <div class="relative border-2 border-ink bg-parchment overflow-visible" :id="`project-${project.id}`">
+  <div class="relative bg-parchment overflow-visible shadow-[4px_4px_0_0_#1E1E1E]" :id="`project-${project.id}`">
     <!-- 未展开：报纸卡片 - 只显示标题，但保持与展开后相同大小 -->
     <div
       v-if="state === 'idle'"
