@@ -66,6 +66,7 @@
           :items="experiences"
           @edit="editExperience"
           @delete="confirmDelete"
+          @toggle-featured="toggleFeatured"
         />
       </template>
     </div>
@@ -90,6 +91,7 @@ const form = reactive({
   contentMarkdown: '',
   stampStatus: 'published',
   sortOrder: 0,
+  featured: false,
 })
 
 const columns = [
@@ -151,9 +153,18 @@ const openNewForm = () => {
 }
 
 const resetForm = () => {
-  Object.assign(form, { columnType: 'early', year: '', title: '', contentMarkdown: '', stampStatus: 'published', sortOrder: experiences.value.length })
+  Object.assign(form, { columnType: 'early', year: '', title: '', contentMarkdown: '', stampStatus: 'published', sortOrder: experiences.value.length, featured: false })
   editingId.value = null
   showForm.value = false
+}
+
+const toggleFeatured = async (item: any) => {
+  try {
+    await put(`/api/experiences/${item.id}`, { featured: !item.featured })
+    await loadExperiences()
+  } catch (e: any) {
+    error.value = '更新失败: ' + (e?.data?.message || e?.message || '未知错误')
+  }
 }
 
 onMounted(loadExperiences)

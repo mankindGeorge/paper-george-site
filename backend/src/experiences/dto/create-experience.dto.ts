@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsEnum, IsBoolean } from 'class-validator';
 
 export enum StampStatus {
   published = 'published',
@@ -26,4 +26,8 @@ export class CreateExperienceDto {
   @IsNumber()
   @IsOptional()
   sortOrder?: number;
+
+  @IsBoolean()
+  @IsOptional()
+  featured?: boolean;
 }

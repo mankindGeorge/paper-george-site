@@ -65,6 +65,7 @@
           :items="scraps"
           @edit="editScrap"
           @delete="confirmDelete"
+          @toggle-featured="toggleFeatured"
         />
       </template>
     </div>
@@ -84,7 +85,7 @@ const editingId = ref<number | null>(null)
 const loading = ref(true)
 const error = ref('')
 
-const form = reactive({ title: '', content: '', imageUrl: '', rotation: 0, sortOrder: 0 })
+const form = reactive({ title: '', content: '', imageUrl: '', rotation: 0, sortOrder: 0, featured: false })
 
 const columns = [
   { key: 'title', label: '标题' },
@@ -144,7 +145,7 @@ const openNewForm = () => {
 }
 
 const resetForm = () => {
-  Object.assign(form, { title: '', content: '', imageUrl: '', rotation: 0, sortOrder: scraps.value.length })
+  Object.assign(form, { title: '', content: '', imageUrl: '', rotation: 0, sortOrder: scraps.value.length, featured: false })
   editingId.value = null
   showForm.value = false
 }
@@ -172,6 +173,15 @@ const handleImageUpload = async (event: Event) => {
 
 const removeImage = () => {
   form.imageUrl = ''
+}
+
+const toggleFeatured = async (item: any) => {
+  try {
+    await put(`/api/scraps/${item.id}`, { featured: !item.featured })
+    await loadScraps()
+  } catch (e: any) {
+    error.value = '更新失败: ' + (e?.data?.message || e?.message || '未知错误')
+  }
 }
 
 onMounted(loadScraps)
