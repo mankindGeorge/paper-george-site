@@ -40,32 +40,70 @@ paper-george-site/
 
 ## Docker 部署（推荐）
 
-一键启动所有服务：
+### 前置条件
+
+- Docker >= 20.x
+- Docker Compose >= 2.x
+
+### 1. 克隆项目
 
 ```bash
-# 1. 创建环境变量文件
-cp backend/.env.example .env
-# 编辑 .env 填入配置（JWT_SECRET、SMTP 等）
-
-# 2. 创建 SSL 证书目录（HTTPS 需要）
-mkdir -p ssl
-# 将证书放入 ssl/cert.pem 和 ssl/key.pem
-# 自签名测试证书：openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ssl/key.pem -out ssl/cert.pem
-
-# 3. 启动
-docker-compose up -d
-
-# 4. 初始化数据库（首次启动）
-docker-compose exec backend npx prisma migrate deploy
-docker-compose exec backend npm run prisma:seed
+git clone https://github.com/mankindGeorge/paper-george-site.git
+cd paper-george-site
 ```
 
-Docker 服务说明：
+### 2. 配置环境变量
 
-- `nginx`: Nginx 反向代理（端口 80/443）
-- `frontend`: Nuxt 前端（内部端口 3000）
-- `backend`: NestJS API 服务（内部端口 3001）
-- `postgres-db`: PostgreSQL 数据库
+```bash
+cp backend/.env.example .env
+nano .env
+```
+
+编辑 `.env`，填入实际配置：
+
+```env
+DB_USER=postgres
+DB_PASSWORD=your_password
+JWT_SECRET=your-random-secret-key
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your-email@example.com
+SMTP_PASS=your-email-password
+SMTP_FROM=noreply@example.com
+```
+
+### 3. 启动所有服务
+
+```bash
+docker compose up -d
+```
+
+首次启动会自动：
+- 拉取 `node:20-bookworm`、`node:20-alpine`、`postgres:16-alpine` 镜像
+- 构建前端和后端镜像
+- 创建数据库并同步表结构（`prisma db push`）
+
+### 4. 填充种子数据（首次启动）
+
+```bash
+docker compose exec backend npx tsx prisma/seed.ts
+```
+
+### 5. 访问网站
+
+- **前台:** http://your-server-ip
+- **管理后台:** http://your-server-ip/admin
+- **健康检查:** http://your-server-ip/api/health
+- **默认管理员:** `admin` / `admin123`
+
+### Docker 服务说明
+
+| 服务 | 基础镜像 | 说明 |
+|------|---------|------|
+| `postgres-db` | postgres:16-alpine | PostgreSQL 数据库 |
+| `backend` | node:20-bookworm | NestJS API（端口 3001） |
+| `frontend` | node:20-alpine | Nuxt 前端 SSR（端口 3000） |
+| `nginx` | nginx:alpine | 反向代理（端口 80） |
 
 ### 更改端口
 
@@ -75,10 +113,38 @@ Docker 服务说明：
 nginx:
   ports:
     - "8080:80"     # 改为 8080
-    - "8443:443"    # 改为 8443
 ```
 
-如需 HTTPS，将证书放入 `ssl/` 目录，Nginx 会自动加载 `ssl/cert.pem` 和 `ssl/key.pem`。
+### 更新部署
+
+```bash
+git pull origin main
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+```
+
+### 常用命令
+
+```bash
+# 查看服务状态
+docker compose ps
+
+# 查看日志
+docker compose logs -f backend
+docker compose logs -f frontend
+
+# 重启单个服务
+docker compose restart backend
+
+# 进入容器调试
+docker compose exec backend sh
+docker compose exec frontend sh
+
+# 数据库操作
+docker compose exec backend npx prisma db push      # 同步表结构
+docker compose exec backend npx tsx prisma/seed.ts  # 重新填充种子
+```
 
 ***
 
