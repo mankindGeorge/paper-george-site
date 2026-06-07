@@ -37,6 +37,7 @@ services:
     build: ./frontend
     environment:
       NUXT_PUBLIC_API_BASE: ""
+      NUXT_API_BASE_DIRECT: http://backend:3001
     depends_on:
       - backend
 
