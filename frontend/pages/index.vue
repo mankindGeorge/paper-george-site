@@ -48,7 +48,7 @@
             项目展示
           </h2>
           <p class="text-center font-mono text-xs text-ink/60 mb-8 uppercase tracking-widest">项目作品集 &amp; 技术索引</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-ink max-w-5xl mx-auto">
+          <div class="project-grid grid grid-cols-1 md:grid-cols-2 gap-px bg-ink max-w-5xl mx-auto">
             <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
           </div>
         </div>
@@ -304,6 +304,13 @@ onMounted(() => {
 </script>
 
 <style>
+/* 奇数项目：最后一个卡片居中保持原始大小 */
+.project-grid > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  max-width: calc(50% - 1px);
+  margin: 0 auto;
+}
+
 /* 信封出现 */
 .envelope-wrap {
   animation: envelope-appear 0.5s ease-out forwards;
