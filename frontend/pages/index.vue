@@ -48,7 +48,7 @@
             项目展示
           </h2>
           <p class="text-center font-mono text-xs text-ink/60 mb-8 uppercase tracking-widest">项目作品集 &amp; 技术索引</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-ink max-w-5xl mx-auto">
             <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
           </div>
         </div>
