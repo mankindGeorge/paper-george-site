@@ -18,7 +18,7 @@ async function bootstrap() {
   });
   app.use(cookieParser());
   app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/api/uploads' });
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, disableErrorMessages: false }));
 
   await app.listen(process.env.PORT || 3001);
 }
