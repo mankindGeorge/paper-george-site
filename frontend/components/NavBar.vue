@@ -35,7 +35,7 @@
         :key="link.id"
         :href="`#${link.id}`"
         class="block font-mono text-xs uppercase tracking-widest px-4 py-3 hover:bg-ink hover:text-newsprint transition-colors"
-        @click.prevent="scrollTo(link.id); mobileOpen = false"
+        @click.prevent="mobileOpen = false; $nextTick(() => scrollTo(link.id))"
       >{{ link.label }}</a>
     </div>
   </nav>
@@ -56,11 +56,20 @@ const scrollTo = (id: string) => {
   const container = document.querySelector('.overflow-y-scroll')
   const target = document.getElementById(id)
   if (container && target) {
-    const navHeight = 52
-    container.scrollTo({
-      top: (target as HTMLElement).offsetTop - navHeight,
-      behavior: 'smooth',
-    })
+    const navHeight = 60
+    const targetTop = (target as HTMLElement).offsetTop - navHeight
+    const start = container.scrollTop
+    const dist = targetTop - start
+    if (Math.abs(dist) < 1) return
+    const duration = 600
+    const startTime = performance.now()
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+    const step = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1)
+      container.scrollTop = start + dist * easeOutCubic(progress)
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
   }
 }
 </script>

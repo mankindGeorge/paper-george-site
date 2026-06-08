@@ -35,8 +35,10 @@
           <h2 class="font-headline text-3xl md:text-4xl font-black text-center mb-8 border-y-4 md:border-b-4 md:border-t-0 border-double border-ink pb-4">
             编辑剪报
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto overflow-visible items-start">
-            <ScrapCard v-for="(scrap, i) in scraps" :key="scrap.id" :scrap="scrap" :index="i" />
+          <div class="masonry-grid max-w-6xl mx-auto overflow-visible" :style="{ columnCount: masonryCols, columnGap: '1.5rem' }">
+            <div v-for="(scrap, i) in scraps" :key="scrap.id" class="masonry-item break-inside-avoid mb-6">
+              <ScrapCard :scrap="scrap" :index="i" />
+            </div>
           </div>
         </div>
       </section>
@@ -187,6 +189,20 @@ const [projectsData, scrapsData, experiencesData] = await Promise.all([
 const projects = ref(projectsData)
 const scraps = ref(scrapsData)
 const experiences = ref(experiencesData)
+
+// Masonry layout for ScrapCards
+const masonryCols = ref(3)
+const updateMasonryCols = () => {
+  const w = window.innerWidth
+  masonryCols.value = w >= 1024 ? 3 : w >= 768 ? 2 : 1
+}
+onMounted(() => {
+  updateMasonryCols()
+  window.addEventListener('resize', updateMasonryCols)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', updateMasonryCols)
+})
 
 // 项目共享状态：控制哪个项目正在打开
 const activeProjectId = ref<number | null>(null)

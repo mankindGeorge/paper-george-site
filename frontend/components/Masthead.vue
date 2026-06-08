@@ -1,14 +1,18 @@
 <template>
   <div class="border-b-4 border-double border-ink pt-8 pb-4 text-center">
     <!-- 标题逐字墨迹印刷 -->
-    <h1 class="font-headline text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-none whitespace-nowrap">
-      <span
-        v-for="(char, i) in titleChars"
-        :key="i"
-        class="inline-block opacity-0"
-        :class="char === ' ' ? 'w-4' : 'animate-ink-print'"
-        :style="{ animationDelay: `${i * 40}ms` }"
-      >{{ char === ' ' ? '\u00A0' : char }}</span>
+    <h1 class="font-headline text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-none">
+      <template v-for="(word, wi) in titleWords" :key="wi">
+        <span v-if="wi > 0" class="inline-block w-4">&nbsp;</span>
+        <span class="inline-block">
+          <span
+            v-for="(char, ci) in word.chars"
+            :key="ci"
+            class="inline-block opacity-0 animate-ink-print"
+            :style="{ animationDelay: `${char.index * 40}ms` }"
+          >{{ char.char }}</span>
+        </span>
+      </template>
     </h1>
 
     <!-- 元数据栏从右侧滑入 -->
@@ -33,7 +37,13 @@
 
 <script setup lang="ts">
 const titleText = 'THE MANKIND GEORGE CHRONICLE'
-const titleChars = titleText.split('')
+
+// 按单词分组，保留全局字符索引用于动画延迟
+let charIndex = 0
+const titleWords = titleText.split(' ').map(word => ({
+  chars: word.split('').map(char => ({ char, index: charIndex++ })),
+}))
+charIndex++ // 跳过空格位置
 
 const currentDate = new Date().toLocaleDateString('zh-CN', {
   year: 'numeric',

@@ -26,7 +26,7 @@
         :alt="scrap.title"
         class="w-full h-auto object-cover border border-ink/20 mb-2 grayscale hover:grayscale-0 transition-all duration-300"
       />
-      <p class="text-base md:text-sm leading-relaxed font-body whitespace-pre-wrap">{{ scrap.content }}</p>
+      <p v-if="scrap.content" class="text-base md:text-sm leading-relaxed font-body whitespace-pre-wrap">{{ scrap.content }}</p>
     </div>
   </div>
 </template>
