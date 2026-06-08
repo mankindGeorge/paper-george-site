@@ -52,10 +52,11 @@ async function main() {
   await prisma.scrap.deleteMany();
   await prisma.scrap.createMany({
     data: [
-      { title: '关于 George Mankind', content: '一个来自广东揭阳惠来的00后，现就读于广东财经大学数据科学与大数据技术（智能计算）专业。ENFJ人格，积极开朗，充满好奇心，始终相信努力进步的力量。\n\n生日：2006年8月8日\n坐标：广州 & 佛山', rotation: 1.5, sortOrder: 1 },
-      { title: 'ENFJ 的一天', content: '早晨被闹钟叫醒，第一件事是看看技术社区有什么新动态。\n上课时认真听讲，下课后和同学讨论项目思路。\n晚上回到宿舍，打开VS Code开始写代码。\n虽然偶尔会遇到Bug，但解决问题的瞬间总是让人兴奋不已。\n\n这就是一个ENFJ数据科学学生的日常。', rotation: -0.8, sortOrder: 2 },
-      { title: '惠来印象', content: '广东揭阳惠来，一个位于粤东南沿海的小城。\n这里有新鲜的海鲜，热情的乡亲，还有我童年的记忆。\n从惠来到广州，从海边到都市，每一步都是成长。\n\n家乡的味道，永远是最温暖的记忆。', rotation: 0.5, sortOrder: 3 },
-      { title: '数据科学随想', content: '数据不仅仅是数字，它是故事的载体。\n每一个数据点背后，都有一个真实的世界。\n作为数据科学的学习者，我希望用数据讲述有意义的故事。\n\n从Python到机器学习，从分析到可视化，\n这条路上充满了挑战，但也充满了可能性。', rotation: -1.2, sortOrder: 4 },
+      { title: 'George 的个人画像', content: '数据不仅仅是数字，它是故事的载体。\n每一个数据点背后，都有一个真实的世界。\n作为数据科学的学习者，我希望用数据讲述有意义的故事。\n\n从Python到机器学习，从分析到可视化，\n这条路上充满了挑战，但也充满了可能性。', imageUrl: '/api/uploads/george-portrait.png', rotation: -1.2, sortOrder: 1 },
+      { title: '关于 George Mankind', content: '一个来自广东揭阳惠来的00后，现就读于广东财经大学数据科学与大数据技术（智能计算）专业。ENFJ人格，积极开朗，充满好奇心，始终相信努力进步的力量。\n\n生日：2006年8月8日\n坐标：广州 & 佛山', rotation: 1.5, sortOrder: 2 },
+      { title: 'ENFJ 的一天', content: '早晨被闹钟叫醒，第一件事是看看技术社区有什么新动态。\n上课时认真听讲，下课后和同学讨论项目思路。\n晚上回到宿舍，打开VS Code开始写代码。\n虽然偶尔会遇到Bug，但解决问题的瞬间总是让人兴奋不已。\n\n这就是一个ENFJ数据科学学生的日常。', rotation: -0.8, sortOrder: 3 },
+      { title: '惠来印象', content: '广东揭阳惠来，一个位于粤东南沿海的小城。\n这里有新鲜的海鲜，热情的乡亲，还有我童年的记忆。\n从惠来到广州，从海边到都市，每一步都是成长。\n\n家乡的味道，永远是最温暖的记忆。', rotation: 0.5, sortOrder: 4 },
+      { title: '数据科学随想', content: '数据不仅仅是数字，它是故事的载体。\n每一个数据点背后，都有一个真实的世界。\n作为数据科学的学习者，我希望用数据讲述有意义的故事。\n\n从Python到机器学习，从分析到可视化，\n这条路上充满了挑战，但也充满了可能性。', rotation: -1.2, sortOrder: 5 },
     ],
   });
 
