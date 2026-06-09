@@ -73,4 +73,4 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} "cd /root/project/paper-george-site && git pull origin main && docker compose up -d --build && docker image prune -f"
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} "cd /root/project/paper-george-site && git stash && git pull origin main && docker compose up -d --build && docker image prune -f"
