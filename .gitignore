@@ -40,3 +40,8 @@ backend/uploads/*
 # Trae IDE
 .trae/
 .trae-cn/
+
+# qoder
+AGENTS.md
+AGENTS.local.md
+AGENTS.ADVICE.md
