@@ -5,7 +5,8 @@ export const useApi = () => {
     : (config.public.apiBase as string)
   const { token } = useAuth()
 
-  const getHeaders = () => token.value ? { Authorization: `Bearer ${token.value}` } : {}
+  const getHeaders = (): Record<string, string> =>
+    token.value ? { Authorization: `Bearer ${token.value}` } : {}
 
   const get = <T>(path: string) => $fetch<T>(`${apiBase}${path}`, { credentials: 'include', headers: getHeaders() })
   const post = <T>(path: string, body: any) => $fetch<T>(`${apiBase}${path}`, { method: 'POST', body, credentials: 'include', headers: getHeaders() })
