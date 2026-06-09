@@ -49,6 +49,10 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Prepare Nuxt
+        working-directory: frontend
+        run: npx nuxi prepare
+
       - name: Type check
         working-directory: frontend
         run: npx nuxi typecheck
